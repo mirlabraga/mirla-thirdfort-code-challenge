@@ -41,6 +41,25 @@ describe("/notes*", () => {
     app.close(done);
   });
 
+  describe("POST /notes", () => {
+    it("Should create it", async () => {
+      expect((await Notes.find({})).length).toBe(0);
+
+      const result = await request(app)
+        .post("/notes")
+        .set("Authorization", `Bearer ${userAToken}`)
+        .send({ text: "myText" });
+
+      const notes = await Notes.find({});
+
+      expect(result.status).toEqual(200);
+      expect(notes.length).toBe(1);
+      expect(notes[0].text).toBe("myText");
+      expect(notes[0].owner).toBe("user-a");
+      expect(notes[0].archived).toBe(false);
+    });
+  });
+
   describe("GET /notes/unarchive", () => {
     let userANotes: Note[];
     let userBNotes: Note[];

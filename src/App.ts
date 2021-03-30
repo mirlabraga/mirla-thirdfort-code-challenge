@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 
 import "dotenv/config";
 import {
+  createNote,
   getArchivedNotes,
   getUnarchivedNotes,
 } from "./controllers/Notes.controller";
@@ -35,6 +36,7 @@ const catchErrors = (func: (_req: Request, _res: Response) => Promise<void>) => 
 }
 
 app.get("/", (req, res) => res.send("Notes backend alive!"));
+app.post("/notes", jwtCheck, catchErrors(createNote));
 app.get("/notes/archived", jwtCheck, catchErrors(getArchivedNotes));
 app.get("/notes/unarchived", jwtCheck, catchErrors(getUnarchivedNotes));
 
