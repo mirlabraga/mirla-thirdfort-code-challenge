@@ -7,9 +7,13 @@ const bodyParser = require("body-parser");
 
 import "dotenv/config";
 import {
+  archiveNote,
   createNote,
+  deleteNote,
   getArchivedNotes,
   getUnarchivedNotes,
+  unarchiveNote,
+  updateNote,
 } from "./controllers/Notes.controller";
 
 export const app = express();
@@ -37,6 +41,11 @@ const catchErrors = (func: (_req: Request, _res: Response) => Promise<void>) => 
 
 app.get("/", (req, res) => res.send("Notes backend alive!"));
 app.post("/notes", jwtCheck, catchErrors(createNote));
+app.put("/notes/:id", jwtCheck, catchErrors(updateNote));
+app.delete("/notes/:id", jwtCheck, catchErrors(deleteNote));
+
+app.post("/notes/:id/archive", jwtCheck, catchErrors(archiveNote));
+app.post("/notes/:id/unarchive", jwtCheck, catchErrors(unarchiveNote));
 app.get("/notes/archived", jwtCheck, catchErrors(getArchivedNotes));
 app.get("/notes/unarchived", jwtCheck, catchErrors(getUnarchivedNotes));
 

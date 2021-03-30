@@ -60,6 +60,113 @@ describe("/notes*", () => {
     });
   });
 
+  describe("PUT /notes/:id", () => {
+    it("Should update the note", async () => {
+      const note = new Notes({
+        text: "some text",
+        owner: "user-a",
+      });
+      await note.save();
+
+      const result = await request(app)
+        .put(`/notes/${note._id}`)
+        .set("Authorization", `Bearer ${userAToken}`)
+        .send({ text: "my new text" });
+
+      expect(result.status).toEqual(200);
+
+      const updatedNote = await Notes.findOne({ _id: note._id });
+
+      expect(updatedNote?.text).toBe("my new text");
+    });
+  });
+
+  describe("DELETE /notes/:id", () => {
+    it("Should delete the note", async () => {
+      const note = new Notes({
+        text: "some text",
+        owner: "user-a",
+      });
+      await note.save();
+
+      const result = await request(app)
+        .delete(`/notes/${note._id}`)
+        .set("Authorization", `Bearer ${userAToken}`);
+
+      expect(result.status).toEqual(204);
+
+      const deleteNote = await Notes.findOne({ _id: note._id });
+
+      expect(deleteNote).toBeNull();
+    });
+  });
+
+  describe("POST /notes/:id/archive", () => {
+    it("Should archive a note", async () => {
+      const note = new Notes({
+        text: "some text",
+        owner: "user-a",
+        archived: false,
+      });
+      await note.save();
+
+      const result = await request(app)
+        .post(`/notes/${note._id}/archive`)
+        .set("Authorization", `Bearer ${userAToken}`)
+        .send();
+
+      expect(result.status).toEqual(200);
+
+      const archiveNote = await Notes.findOne({ _id: note._id });
+
+      expect(archiveNote?.archived).toBeTruthy();
+    });
+  });
+
+  describe("POST /notes/:id/archive", () => {
+    it("Should archive a note", async () => {
+      const note = new Notes({
+        text: "some text",
+        owner: "user-a",
+        archived: true,
+      });
+      await note.save();
+
+      const result = await request(app)
+        .post(`/notes/${note._id}/unarchive`)
+        .set("Authorization", `Bearer ${userAToken}`)
+        .send();
+
+      expect(result.status).toEqual(200);
+
+      const archiveNote = await Notes.findOne({ _id: note._id });
+
+      expect(archiveNote?.archived).toBeFalsy();
+    });
+  });
+
+  describe("POST /notes/:id/unarchive", () => {
+    it("Should unarchive a note", async () => {
+      const note = new Notes({
+        text: "some text",
+        owner: "user-a",
+        archived: true,
+      });
+      await note.save();
+
+      const result = await request(app)
+        .post(`/notes/${note._id}/unarchive`)
+        .set("Authorization", `Bearer ${userAToken}`)
+        .send();
+
+      expect(result.status).toEqual(200);
+
+      const archiveNote = await Notes.findOne({ _id: note._id });
+
+      expect(archiveNote?.archived).toBeFalsy();
+    });
+  });
+
   describe("GET /notes/unarchive", () => {
     let userANotes: Note[];
     let userBNotes: Note[];

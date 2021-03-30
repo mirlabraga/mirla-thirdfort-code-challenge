@@ -49,3 +49,31 @@ export const deleteNote = async (req: Request, res: Response) => {
   }
 };
 
+const updateNoteWithQuery = async (req: Request, res: Response, noteUpdated: UpdateQuery<typeof Notes>) => {
+  const { sub: owner } = req.user as JwtUser;
+  const { id: _id } = req.params;
+  const note = await Notes.findOneAndUpdate({
+    owner,
+    _id
+  }, noteUpdated);
+  if (!note) {
+    res.status(404).send();
+  } else {
+    res.json(note);
+  }
+};
+
+export const updateNote = async (req: Request, res: Response) => {
+  const { text } = req.body;
+  await updateNoteWithQuery(req, res, { text });
+};
+
+export const archiveNote = async (req: Request, res: Response) => {
+  const archived = true;
+  await updateNoteWithQuery(req, res, { archived });
+};
+
+export const unarchiveNote = async (req: Request, res: Response) => {
+  const archived = false;
+  await updateNoteWithQuery(req, res, { archived });
+};
