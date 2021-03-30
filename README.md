@@ -45,3 +45,4 @@ It is good for maintenance
 * Mongo/Mongoose: Document repository with a schema validation.
 * MockMongo/Jest/supertest: For behavihor test, unit test and end-to-end test. Thoses frameworks
 JS is easy for tests implemation in Node development.
+* Rest api: it's largelly used pattern to expose an API, though GraphQL is becaming more and more used.
