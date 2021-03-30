@@ -34,3 +34,14 @@ I add a documentation that can be imported with postman, or you can (visit this 
 
 ### NOTES:
 * this doesn't handle nicely validation errors
+
+### Tech choices:
+* Docker: Emulate all tecnologies the application needs in a image and providering quick to consume;
+* Node: It is quick to development and I am more familiar with this programming language at the moment;
+* Typescript: It provide Typing and it help for handle values across the application; There are support the specification JS (EcmaScript);
+It is good for maintenance
+* Express: It is a framework to creating end point for NodeJS and it had a good implementation
+* JWT: authentication to support multi users
+* Mongo/Mongoose: Document repository with a schema validation.
+* MockMongo/Jest/supertest: For behavihor test, unit test and end-to-end test. Thoses frameworks
+JS is easy for tests implemation in Node development.
